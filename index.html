@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Bug Sender</title>
+    <style>
+        :root {
+            --primary: #25D366;
+            --primary-dark: #128C7E;
+            --secondary: #ECE5DD;
+            --text: #4A4A4A;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .users-list {
+            margin-top: 20px;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: var(--light);
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-phone {
+            font-weight: 600;
+        }
+        
+        .user-role {
+            font-size: 0.9rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background-color: var(--secondary);
+            display: inline-block;
+        }
+        
+        .role-admin {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .role-user {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .instructions {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>WhatsApp Bug Sender</h1>
+            <p>Kirim bug WhatsApp tanpa pengirim yang terlihat</p>
+        </header>
+        
+        <div class="alert" id="alertBox"></div>
+        
+        <div class="card">
+            <h2 class="card-title">Kirim Bug</h2>
+            <div class="form-group">
+                <label for="target">Nomor Target (dengan kode negara)</label>
+                <input type="text" id="target" placeholder="Contoh: 6281234567890" required>
+            </div>
+            <button class="btn btn-danger btn-block" id="sendBug">Kirim Bug WhatsApp</button>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title">Kelola Pengguna</h2>
+            <div class="form-group">
+                <label for="userPhone">Nomor Telepon</label>
+                <input type="text" id="userPhone" placeholder="Masukkan nomor telepon" required>
+            </div>
+            <div class="form-group">
+                <label for="userRole">Peran (Role)</label>
+                <select id="userRole">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button class="btn btn-block" id="addUser">Tambah Pengguna</button>
+            <button class="btn btn-warning btn-block" id="addAdmin" style="margin-top: 10px;">Tambah Admin</button>
+            
+            <div class="users-list" id="usersList">
+                <!-- Daftar pengguna akan dimuat di sini -->
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Cara Penggunaan:</h3>
+            <ol>
+                <li>Masukkan nomor target dengan format kode negara (contoh: 6281234567890)</li>
+                <li>Klik "Kirim Bug WhatsApp" untuk mengirim bug</li>
+                <li>Tambahkan pengguna dengan memilih peran (user/admin)</li>
+                <li>Admin dapat mengirim bug, user hanya dapat melihat</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alertBox = document.getElementById('alertBox');
+            const targetInput = document.getElementById('target');
+            const sendBugBtn = document.getElementById('sendBug');
+            const userPhoneInput = document.getElementById('userPhone');
+            const userRoleSelect = document.getElementById('userRole');
+            const addUserBtn = document.getElementById('addUser');
+            const addAdminBtn = document.getElementById('addAdmin');
+            const usersList = document.getElementById('usersList');
+            
+            // Fungsi untuk menampilkan alert
+            function showAlert(message, type) {
+                alertBox.textContent = message;
+                alertBox.className = 'alert alert-' + type;
+                alertBox.style.display = 'block';
+                
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Fungsi untuk memuat daftar pengguna
+            function loadUsers() {
+                fetch('/api/users')
+                    .then(response => response.json())
+                    .then(users => {
+                        usersList.innerHTML = '';
+                        users.forEach(user => {
+                            const userItem = document.createElement('div');
+                            userItem.className = 'user-item';
+                            userItem.innerHTML = `
+                                <div class="user-info">
+                                    <div class="user-phone">${user.phone}</div>
+                                    <span class="user-role ${user.role === 'admin' ? 'role-admin' : 'role-user'}">${user.role}</span>
+                                </div>
+                                <div class="user-actions">
+                                    <select class="role-select" data-phone="${user.phone}">
+                                        <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
+                                        <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                                    </select>
+                                </div>
+                            `;
+                            usersList.appendChild(userItem);
+                        });
+                        
+                        // Tambahkan event listener untuk perubahan role
+                        document.querySelectorAll('.role-select').forEach(select => {
+                            select.addEventListener('change', function() {
+                                changeUserRole(this.dataset.phone, this.value);
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showAlert('Gagal memuat daftar pengguna', 'danger');
+                    });
+            }
+            
+            // Fungsi untuk mengubah peran pengguna
+            function changeUserRole(phone, newRole) {
+                fetch('/api/change-role', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone, newRole })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showAlert('Peran pengguna berhasil diubah', 'success');
+                        loadUsers();
+                    } else {
+                        showAlert('Gagal mengubah peran pengguna', 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Gagal mengubah peran pengguna', 'danger');
+                });
+            }
+            
+            // Event listener untuk tombol kirim bug
+            sendBugBtn.addEventListener('click', function() {
+                const target = targetInput.value.trim();
+                
+                if (!target) {
+                    showAlert('Masukkan nomor target terlebih dahulu', 'danger');
+                    return;
+                }
+                
+                fetch('/api/crash', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ target })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showAlert(`Bug berhasil dikirim ke ${target}`, 'success');
+                    } else {
+                        showAlert('Gagal mengirim bug: ' + data.message, 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Terjadi kesalahan saat mengirim bug', 'danger');
+                });
+            });
+            
+            // Event listener untuk tombol tambah pengguna
+            addUserBtn.addEventListener('click', function() {
+                const phone = userPhoneInput.value.trim();
+                const role = userRoleSelect.value;
+                
+                if (!phone) {
+                    showAlert('Masukkan nomor telepon terlebih dahulu', 'danger');
+                    return;
+                }
+                
+                fetch('/api/add-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone, role })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showAlert('Pengguna berhasil ditambahkan', 'success');
+                        userPhoneInput.value = '';
+                        loadUsers();
+                    } else {
+                        showAlert('Gagal menambahkan pengguna', 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Terjadi kesalahan saat menambahkan pengguna', 'danger');
+                });
+            });
+            
+            // Event listener untuk tombol tambah admin
+            addAdminBtn.addEventListener('click', function() {
+                const phone = userPhoneInput.value.trim();
+                
+                if (!phone) {
+                    showAlert('Masukkan nomor telepon terlebih dahulu', 'danger');
+                    return;
+                }
+                
+                fetch('/api/add-admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showAlert('Admin berhasil ditambahkan', 'success');
+                        userPhoneInput.value = '';
+                        loadUsers();
+                    } else {
+                        showAlert('Gagal menambahkan admin', 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Terjadi kesalahan saat menambahkan admin', 'danger');
+                });
+            });
+            
+            // Muat daftar pengguna saat halaman dimuat
+            loadUsers();
+        });
+    </script>
+</body>
+</html>
